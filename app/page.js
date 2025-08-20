@@ -1,20 +1,19 @@
 
-
-
-
 "use client";
 import Image from "next/image";
 import { motion, useAnimation, useInView } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+
+// Draggable dark mode toggle
+import { useEffect } from "react";
 
 // Dummy data for timeline, portfolio, and skills
 const timeline = [
-  { year: "2023", desc: "Masuk Politeknik Negeri Lampung" },
-  { year: "2024", desc: "Belajar" },
-  { year: "2025", desc: "Belajar" },
-  { year: "2026", desc: "Belajar" },
-  { year: "2027", desc: "Lulus" },
-
+  { year: "2023", desc: "The beginning of the journey, laying strong foundations." },
+  { year: "2024", desc: "A year of exploration, learning, and adaptation." },
+  { year: "2025", desc: "Growth and expansion with new opportunities." },
+  { year: "2026", desc: "Innovation and transformation through creativity and technology." },
+  { year: "2027", desc: "Achievement and sustainability, shaping a strong future." },
 ];
 const portfolio = [
   { img: "/globe.svg", title: "Aplikasi Web", desc: "Web apps modern & responsif" },
@@ -52,137 +51,196 @@ function Section({ children, className = "", ...props }) {
 }
 
 export default function Home() {
-  // Typewriter effect for intro
-  // (CSS only, see .typewriter in globals.css)
+  const [darkMode, setDarkMode] = useState(false);
+  const [openYear, setOpenYear] = useState(null);
+  // Draggable toggle
+  const [togglePos, setTogglePos] = useState({ x: 0, y: 0 });
+  const [dragging, setDragging] = useState(false);
+  const toggleRef = useRef(null);
+  useEffect(() => {
+    function onMouseMove(e) {
+      if (!dragging) return;
+      setTogglePos(pos => ({ x: pos.x + e.movementX, y: pos.y + e.movementY }));
+    }
+    function onMouseUp() { setDragging(false); }
+    if (dragging) {
+      window.addEventListener('mousemove', onMouseMove);
+      window.addEventListener('mouseup', onMouseUp);
+    } else {
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+    }
+    return () => {
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+    };
+  }, [dragging]);
   return (
-  <main className="bg-white text-black min-h-screen w-full font-sans">
-      {/* 1. Intro Section */}
-  <Section className="min-h-screen flex flex-col justify-center items-center relative overflow-hidden parallax-bg px-4 sm:px-0" id="intro">
-        <div className="absolute inset-0 pointer-events-none" aria-hidden>
-          <svg width="100%" height="100%" className="absolute left-0 top-0" style={{zIndex:0}}>
-            <line x1="0" y1="0" x2="100%" y2="100%" stroke="#eee" strokeWidth="1" />
-            <line x1="100%" y1="0" x2="0" y2="100%" stroke="#eee" strokeWidth="1" />
-          </svg>
+    <main className={`min-h-screen w-full font-sans transition-colors duration-300 ${darkMode ? 'bg-black text-white' : 'bg-white text-black'}`}> 
+      {/* Draggable dark mode toggle */}
+      <div
+        ref={toggleRef}
+        style={{ position: 'fixed', top: 16 + togglePos.y, right: 16 - togglePos.x, zIndex: 100, cursor: dragging ? 'grabbing' : 'grab', userSelect: 'none' }}
+        onMouseDown={() => setDragging(true)}
+        aria-label="Toggle dark mode"
+        tabIndex={0}
+        role="button"
+        onClick={() => setDarkMode(d => !d)}
+      >
+        <div className={`w-12 h-12 flex items-center justify-center rounded-full border shadow transition-colors ${darkMode ? 'border-white bg-black' : 'border-black bg-white'}`}
+          title={darkMode ? 'Light Mode' : 'Dark Mode'}>
+          {darkMode ? (
+            // Sun icon
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FFD700" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2m11-11h-2M3 12H1m16.95 7.07l-1.41-1.41M6.34 6.34L4.93 4.93m12.02 0l-1.41 1.41M6.34 17.66l-1.41 1.41"/></svg>
+          ) : (
+            // Moon icon
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#333" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/></svg>
+          )}
         </div>
-        <motion.h1
-          className="text-3xl xs:text-4xl sm:text-5xl md:text-7xl font-extrabold text-center typewriter relative z-10 leading-tight"
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2 }}
-        >
-          Rahmat Al Ihsan
-        </motion.h1>
-        <motion.p
-          className="mt-6 text-base xs:text-lg sm:text-2xl font-light text-center max-w-xs xs:max-w-md sm:max-w-xl relative z-10"
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, delay: 0.5 }}
-        >
-          Mahasiswa IT, tapi nggak IT-IT banget.
-        </motion.p>
-      </Section>
-
-      {/* 2. Foto Diri / Profil */}
-  <Section className="min-h-screen flex flex-col justify-center items-center bg-white px-4 sm:px-0" id="profile">
-        <motion.div
-          className="rounded-full border-4 border-black w-32 h-32 xs:w-40 xs:h-40 sm:w-48 sm:h-48 overflow-hidden shadow-xl grayscale-hover transition-all duration-500"
-          initial={{ x: -120, opacity: 0 }}
-          whileInView={{ x: 0, opacity: 1 }}
-          transition={{ duration: 1, ease: "easeOut" }}
-        >
-          <Image src="/xsann.svg" alt="Foto Diri" width={192} height={192} className="object-cover w-full h-full" />
-        </motion.div>
-        <div className="mt-6 text-lg xs:text-xl font-semibold text-center">Rahmat Al Ihsan</div>
-      </Section>
+      </div>
+      {/* Hero Section */}
+  <section className={`${darkMode ? 'bg-black' : 'bg-white'} min-h-screen flex flex-col justify-center`}>
+        <div className="container mx-auto flex flex-col md:flex-row items-center py-16 px-4 gap-10">
+          {/* Kiri: Foto */}
+          <div className="flex-shrink-0 flex justify-center md:justify-start w-full md:w-1/2">
+            <img
+              src="/xsann.svg"
+              alt="Foto Rahmat"
+              className="rounded-full border-4 border-black w-64 h-64 object-cover shadow-xl"
+            />
+          </div>
+          {/* Kanan: Teks */}
+          <div className="w-full md:w-1/2 flex flex-col items-center md:items-start text-center md:text-left">
+            <h1 className={`text-3xl sm:text-5xl font-extrabold mb-2 ${darkMode ? 'text-white' : 'text-black'}`}>Rahmat Al Ihsan</h1>
+            <h2 className={`text-lg sm:text-xl font-medium mb-4 ${darkMode ? 'text-white' : 'text-black'}`}>
+              Mahasiswa Teknologi Rekayasa Internet | Politeknik Negeri Lampung
+            </h2>
+            <p className={`text-base sm:text-lg max-w-xl transition-colors ${darkMode ? 'text-gray-200 hover:text-gray-300' : 'text-gray-800 hover:text-gray-600'}`}>
+              Saya berasal dari kota dingin di Lampung Barat. Seorang mahasiswa yang senang untuk belajar dan berkembang di dunia teknologi. Ketertarikan saya mencakup pemrograman, Web Developer, Internet Of Things, serta pengembangan kecerdasan buatan. Saya percaya bahwa teknologi dapat membantu menyelesaikan banyak tantangan di sekitar kita.
+            </p>
+            <p className={`mt-4 text-xs italic border-l-4 pl-3 font-serif ${darkMode ? 'text-gray-400 border-white' : 'text-gray-500 border-black'}`}>"sesuatu yang besar dimulai dari yang kecil"</p>
+          </div>
+        </div>
+      </section>
 
       {/* 3. Tentang Saya / Journey Hidup */}
-  <Section className="min-h-screen flex flex-col items-center justify-center bg-white px-4 sm:px-0" id="about">
-  <h2 className="text-2xl xs:text-3xl font-bold mb-8 sm:mb-10 font-title text-center">Journey Hidup</h2>
-  <div className="relative w-full max-w-xs xs:max-w-md sm:max-w-xl mx-auto flex flex-col gap-8 sm:gap-12">
-          <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 timeline-line" />
-          {timeline.map((item, i) => (
-            <motion.div
-              key={i}
-              className="relative flex items-center gap-8"
-              initial={{ opacity: 0, y: 60 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: i * 0.2 }}
-            >
-              <div className="w-1/2 text-right pr-8">
-                <div className="text-lg font-bold">{item.year}</div>
-              </div>
-              <div className="timeline-dot" />
-              <div className="w-1/2 text-left pl-8">
-                <div className="text-base font-light">{item.desc}</div>
-              </div>
-            </motion.div>
-          ))}
+  <section className={`min-h-screen flex flex-col items-center justify-center ${darkMode ? 'bg-black' : 'bg-white'} px-2 sm:px-0`} id="about">
+        <div className="mb-2 text-center">
+          <span className={`italic text-base ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>A five-year journey timeline</span>
         </div>
-      </Section>
+        <div className="w-full overflow-x-auto">
+          <div className="flex flex-col items-center">
+            {/* Timeline garis dan node */}
+            <div className="relative flex flex-row flex-nowrap items-center gap-2 sm:gap-0 py-8 px-2 min-w-[700px]" style={{justifyContent: 'flex-start'}}>
+              {/* Garis lurus menyesuaikan dark mode */}
+              <div className={`absolute top-1/2 left-0 right-0 h-0.5 z-0 ${darkMode ? 'bg-white' : 'bg-black'}`} style={{height: 2}} />
+              {timeline.map((item, i) => (
+                <div key={item.year} className="relative flex flex-col items-center z-10" style={{minWidth: 70}}>
+                  {/* Node bulat interaktif */}
+                  <button
+                    onClick={() => setOpenYear(openYear === i ? null : i)}
+                    className={`transition-all duration-200 rounded-full flex items-center justify-center focus:outline-none ${openYear === i ? 'scale-110 shadow-lg' : ''} ${item.year === '2025' ? 'w-10 h-10' : 'w-7 h-7'} mx-0 border-2 ${darkMode ? 'border-white bg-black' : 'border-black bg-white'}`}
+                    style={{zIndex: 2}}
+                    aria-label={`Buka detail ${item.year}`}
+                  >
+                    <div className={`${item.year === '2025' ? 'w-4 h-4' : 'w-3 h-3'} rounded-full ${darkMode ? 'bg-white' : 'bg-black'}`} />
+                  </button>
+                  {/* Tahun */}
+                  <span className={`mt-2 text-base md:text-lg font-bold font-mono tracking-wide select-none ${darkMode ? 'text-white' : 'text-black'}`}>
+                    {item.year}
+                  </span>
+                  {/* Detail accordion */}
+                  <motion.div
+                    initial={false}
+                    animate={{ height: openYear === i ? 'auto' : 0, opacity: openYear === i ? 1 : 0 }}
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    className="overflow-hidden w-44 md:w-56"
+                  >
+                    {openYear === i && (
+                      <div className={`mt-2 mb-2 px-2 py-2 text-xs md:text-sm rounded shadow border ${darkMode ? 'text-white border-white bg-black' : 'text-black border-black bg-white'}`}>
+                        {item.desc}
+                      </div>
+                    )}
+                  </motion.div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* 4. Portofolio */}
-  <Section className="min-h-screen flex flex-col items-center justify-center bg-white px-4 sm:px-0" id="portfolio">
-  <h2 className="text-2xl xs:text-3xl font-bold mb-8 sm:mb-10 font-title text-center">Portofolio</h2>
-  <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 w-full max-w-xs xs:max-w-2xl lg:max-w-5xl">
-          {portfolio.map((item, i) => (
-            <motion.div
-              key={i}
-              className="group bg-white border border-black rounded-2xl shadow-xl overflow-hidden flex flex-col items-center justify-center p-6 cursor-pointer relative"
-              whileHover={{ scale: 1.04, rotate: -2 }}
-              transition={{ type: "spring", stiffness: 300 }}
-            >
-              <div className="w-full h-40 flex items-center justify-center overflow-hidden">
-                <Image src={item.img} alt={item.title} width={80} height={80} className="object-contain" />
+  <section className={`min-h-screen flex flex-col items-center justify-center ${darkMode ? 'bg-black' : 'bg-white'} px-4 sm:px-0`} id="portfolio">
+  <h2 className={`text-2xl xs:text-3xl font-bold mb-8 sm:mb-10 font-title text-center ${darkMode ? 'text-white' : 'text-black'}`}>Portofolio</h2>
+        <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 w-full max-w-xs xs:max-w-2xl lg:max-w-5xl">
+          {portfolio.map((item, i) => {
+            // All portfolio items show inline alert 'Coming soon'
+            const [showInlineAlert, setShowInlineAlert] = useState(false);
+            const handleClick = () => {
+              setShowInlineAlert(true);
+              setTimeout(() => setShowInlineAlert(false), 2000);
+            };
+            return (
+              <div
+                key={i}
+                className="group bg-white border border-black rounded-2xl shadow-xl overflow-hidden flex flex-col items-center justify-center p-6 cursor-pointer relative hover:bg-gray-100 transition-colors"
+                tabIndex={0}
+                onClick={handleClick}
+                onKeyDown={e => { if (e.key === 'Enter') handleClick(); }}
+                role="button"
+                aria-label={`Lihat detail ${item.title}`}
+              >
+                <div className="w-full h-40 flex items-center justify-center overflow-hidden">
+                  <Image src={item.img} alt={item.title} width={80} height={80} className="object-contain" />
+                </div>
+                <div className={`mt-4 text-xl font-bold group-hover:underline transition-all ${darkMode ? 'text-white' : 'text-black'}`}>{item.title}</div>
+                <div className={`text-base transition-all ${darkMode ? 'text-gray-200 group-hover:text-white' : 'text-gray-700 group-hover:text-black'}`}>{item.desc}</div>
+                <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-80 flex items-center justify-center transition-all duration-300">
+                  <span className="text-white text-lg font-bold">Lihat Detail</span>
+                </div>
+                {/* Inline alert for all portfolio items */}
+                {showInlineAlert && (
+                  <div className={`absolute left-1/2 -translate-x-1/2 bottom-4 rounded-lg px-4 py-2 font-semibold shadow z-20 animate-fadeIn border ${darkMode ? 'bg-black border-white text-white' : 'bg-white border-black text-black'}`}>
+                    Coming soon
+                  </div>
+                )}
               </div>
-              <div className="mt-4 text-xl font-bold text-black group-hover:underline transition-all">{item.title}</div>
-              <div className="text-base text-gray-700 group-hover:text-black transition-all">{item.desc}</div>
-              <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-80 flex items-center justify-center transition-all duration-300">
-                <span className="text-white text-lg font-bold">Lihat Detail</span>
-              </div>
-            </motion.div>
-          ))}
+            );
+          })}
         </div>
-      </Section>
+      </section>
 
       {/* 5. Skill / Teknologi */}
-  <Section className="min-h-screen flex flex-col items-center justify-center bg-white px-4 sm:px-0" id="skills">
-  <h2 className="text-2xl xs:text-3xl font-bold mb-8 sm:mb-10 font-title text-center">Skill & Teknologi</h2>
-  <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-5 gap-6 sm:gap-8">
+  <section className={`min-h-screen flex flex-col items-center justify-center ${darkMode ? 'bg-black' : 'bg-white'} px-4 sm:px-0`} id="skills">
+        <h2 className="text-2xl xs:text-3xl font-bold mb-8 sm:mb-10 font-title text-center">Skill & Teknologi</h2>
+        <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-5 gap-6 sm:gap-8">
           {skills.map((item, i) => (
-            <motion.div
+            <div
               key={i}
               className="flex flex-col items-center justify-center"
-              whileHover={{ rotateY: 180 }}
-              style={{ perspective: 600 }}
-              transition={{ duration: 0.7 }}
             >
               <Image src={item.img} alt={item.name} width={56} height={56} className="object-contain grayscale hover:grayscale-0 transition-all duration-500" />
-              <div className="mt-2 text-base font-semibold text-black">{item.name}</div>
-            </motion.div>
+              <div className={`mt-2 text-base font-semibold ${darkMode ? 'text-white' : 'text-black'}`}>{item.name}</div>
+            </div>
           ))}
         </div>
-      </Section>
+      </section>
 
-      {/* 6. Kontak */}
-      <Section className="min-h-screen flex flex-col items-center justify-center bg-white" id="contact">
-        <h2 className="text-3xl font-bold mb-10 font-title">Kontak</h2>
-        <form className="w-full max-w-md flex flex-col gap-6 bg-white border border-black rounded-2xl shadow-xl p-8">
-          <input type="text" placeholder="Nama" className="rounded-lg border border-black px-4 py-2 bg-white text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black transition-all" />
-          <input type="email" placeholder="Email" className="rounded-lg border border-black px-4 py-2 bg-white text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black transition-all" />
-          <textarea placeholder="Pesan" rows={4} className="rounded-lg border border-black px-4 py-2 bg-white text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black transition-all" />
-          <button type="submit" className="rounded-full bg-black text-white px-6 py-3 font-bold shadow-xl ripple transition-all hover:bg-white hover:text-black border border-black">
-            Kirim Pesan
-          </button>
-        </form>
-        <div className="flex gap-6 mt-8">
-          <a href="https://github.com/" target="_blank" rel="noopener noreferrer" className="hover:scale-110 transition-transform">
-            <svg width="32" height="32" fill="none" stroke="black" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.58 2 12.26c0 4.48 2.87 8.28 6.84 9.63.5.09.68-.22.68-.48 0-.24-.01-.87-.01-1.7-2.78.62-3.37-1.36-3.37-1.36-.45-1.18-1.1-1.5-1.1-1.5-.9-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.7 0 0 .84-.28 2.75 1.05A9.36 9.36 0 0 1 12 7.43c.85.004 1.7.12 2.5.35 1.9-1.33 2.74-1.05 2.74-1.05.55 1.4.2 2.44.1 2.7.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.8-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.8 0 .27.18.58.69.48A10.01 10.01 0 0 0 22 12.26C22 6.58 17.52 2 12 2Z"/></svg>
-          </a>
-          <a href="mailto:rahmatalihsaan@gmail.com" className="hover:scale-110 transition-transform">
-            <svg width="32" height="32" fill="none" stroke="black" strokeWidth="2" viewBox="0 0 24 24"><path d="M21 10.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4.5l-7-3.5-7 3.5"/></svg>
-          </a>
+      {/* 6. Kerja Sama / Project Bareng */}
+  <section className={`min-h-screen flex flex-col items-center justify-center ${darkMode ? 'bg-black' : 'bg-white'}`} id="contact">
+        <h2 className={`text-3xl font-bold mb-10 font-title ${darkMode ? 'text-white' : 'text-black'}`}>Relationship</h2>
+        <div className={`w-full max-w-md flex flex-col items-center gap-6 rounded-2xl shadow-xl p-8 border ${darkMode ? 'bg-black border-white' : 'bg-white border-black'}`}>
+          <p className={`text-lg text-center ${darkMode ? 'text-white' : 'text-black'}`}>Tertarik kolaborasi atau project bareng? <br />DM saya langsung di Instagram atau email, yuk diskusi!</p>
+          <div className="flex gap-6 mt-4">
+            <a href="https://instagram.com/rhmtasn_" target="_blank" rel="noopener noreferrer" className="hover:scale-110 transition-transform">
+              <svg width="32" height="32" fill="none" stroke="black" strokeWidth="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17" cy="7" r="1.5"/></svg>
+            </a>
+            <a href="mailto:rahmatalihsaan@gmail.com" className="hover:scale-110 transition-transform">
+              <svg width="32" height="32" fill="none" stroke="black" strokeWidth="2" viewBox="0 0 24 24"><path d="M21 10.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4.5l-7-3.5-7 3.5"/></svg>
+            </a>
+          </div>
         </div>
-      </Section>
+      </section>
     </main>
   );
 }
