@@ -56,6 +56,7 @@ export default function Home() {
   // Draggable toggle
   const [togglePos, setTogglePos] = useState({ x: 0, y: 0 });
   const [dragging, setDragging] = useState(false);
+  const [showInlineAlert, setShowInlineAlert] = useState({});
   const toggleRef = useRef(null);
   useEffect(() => {
     function onMouseMove(e) {
@@ -120,7 +121,7 @@ export default function Home() {
             <p className={`text-base sm:text-lg max-w-xl transition-colors ${darkMode ? 'text-gray-200 hover:text-gray-300' : 'text-gray-800 hover:text-gray-600'}`}>
               Saya berasal dari kota dingin di Lampung Barat. Seorang mahasiswa yang senang untuk belajar dan berkembang di dunia teknologi. Ketertarikan saya mencakup pemrograman, Web Developer, Internet Of Things, serta pengembangan kecerdasan buatan. Saya percaya bahwa teknologi dapat membantu menyelesaikan banyak tantangan di sekitar kita.
             </p>
-            <p className={`mt-4 text-xs italic border-l-4 pl-3 font-serif ${darkMode ? 'text-gray-400 border-white' : 'text-gray-500 border-black'}`}>"sesuatu yang besar dimulai dari yang kecil&quot;"</p>
+            <p className={`mt-4 text-xs italic border-l-4 pl-3 font-serif ${darkMode ? 'text-gray-400 border-white' : 'text-gray-500 border-black'}`}>&ldquo;sesuatu yang besar dimulai dari yang kecil&rdquo;</p>
           </div>
         </div>
       </section>
@@ -177,10 +178,9 @@ export default function Home() {
         <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 w-full max-w-xs xs:max-w-2xl lg:max-w-5xl">
           {portfolio.map((item, i) => {
             // All portfolio items show inline alert 'Coming soon'
-            const [showInlineAlert, setShowInlineAlert] = useState(false);
             const handleClick = () => {
-              setShowInlineAlert(true);
-              setTimeout(() => setShowInlineAlert(false), 2000);
+              setShowInlineAlert(prev => ({ ...prev, [i]: true }));
+              setTimeout(() => setShowInlineAlert(prev => ({ ...prev, [i]: false })), 2000);
             };
             return (
               <div
@@ -201,7 +201,7 @@ export default function Home() {
                   <span className="text-white text-lg font-bold">Lihat Detail</span>
                 </div>
                 {/* Inline alert for all portfolio items */}
-                {showInlineAlert && (
+                {showInlineAlert[i] && (
                   <div className={`absolute left-1/2 -translate-x-1/2 bottom-4 rounded-lg px-4 py-2 font-semibold shadow z-20 animate-fadeIn border ${darkMode ? 'bg-black border-white text-white' : 'bg-white border-black text-black'}`}>
                     Coming soon
                   </div>
