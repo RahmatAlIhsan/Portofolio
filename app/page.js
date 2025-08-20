@@ -59,7 +59,7 @@ export default function Home() {
   const toggleRef = useRef(null);
   useEffect(() => {
     function onMouseMove(e) {
-      if (!dragging) return;
+                  &quot;sesuatu yang besar dimulai dari yang kecil&quot;
       setTogglePos(pos => ({ x: pos.x + e.movementX, y: pos.y + e.movementY }));
     }
     function onMouseUp() { setDragging(false); }
