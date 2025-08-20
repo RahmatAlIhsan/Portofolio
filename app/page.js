@@ -59,7 +59,7 @@ export default function Home() {
   const toggleRef = useRef(null);
   useEffect(() => {
     function onMouseMove(e) {
-                  &quot;sesuatu yang besar dimulai dari yang kecil&quot;
+      if (!dragging) return;
       setTogglePos(pos => ({ x: pos.x + e.movementX, y: pos.y + e.movementY }));
     }
     function onMouseUp() { setDragging(false); }
@@ -103,9 +103,11 @@ export default function Home() {
         <div className="container mx-auto flex flex-col md:flex-row items-center py-16 px-4 gap-10">
           {/* Kiri: Foto */}
           <div className="flex-shrink-0 flex justify-center md:justify-start w-full md:w-1/2">
-            <img
+            <Image
               src="/xsann.svg"
               alt="Foto Rahmat"
+              width={256}
+              height={256}
               className="rounded-full border-4 border-black w-64 h-64 object-cover shadow-xl"
             />
           </div>
@@ -118,7 +120,7 @@ export default function Home() {
             <p className={`text-base sm:text-lg max-w-xl transition-colors ${darkMode ? 'text-gray-200 hover:text-gray-300' : 'text-gray-800 hover:text-gray-600'}`}>
               Saya berasal dari kota dingin di Lampung Barat. Seorang mahasiswa yang senang untuk belajar dan berkembang di dunia teknologi. Ketertarikan saya mencakup pemrograman, Web Developer, Internet Of Things, serta pengembangan kecerdasan buatan. Saya percaya bahwa teknologi dapat membantu menyelesaikan banyak tantangan di sekitar kita.
             </p>
-            <p className={`mt-4 text-xs italic border-l-4 pl-3 font-serif ${darkMode ? 'text-gray-400 border-white' : 'text-gray-500 border-black'}`}>"sesuatu yang besar dimulai dari yang kecil"</p>
+            <p className={`mt-4 text-xs italic border-l-4 pl-3 font-serif ${darkMode ? 'text-gray-400 border-white' : 'text-gray-500 border-black'}`}>"sesuatu yang besar dimulai dari yang kecil&quot;"</p>
           </div>
         </div>
       </section>
