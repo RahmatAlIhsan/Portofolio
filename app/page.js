@@ -51,6 +51,8 @@ function Section({ children, className = "", ...props }) {
 }
 
 export default function Home() {
+  // State untuk skill aktif (klik)
+  const [activeSkill, setActiveSkill] = useState(null);
   const [darkMode, setDarkMode] = useState(false);
   const [openYear, setOpenYear] = useState(null);
   // Draggable toggle
@@ -126,49 +128,41 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 3. Tentang Saya / Journey Hidup */}
-  <section className={`min-h-screen flex flex-col items-center justify-center ${darkMode ? 'bg-black' : 'bg-white'} px-2 sm:px-0`} id="about">
+      {/* 3. Tentang Saya / Journey Hidup - VERTIKAL */}
+      <section className={`min-h-screen flex flex-col items-center justify-center ${darkMode ? 'bg-black' : 'bg-white'} px-2 sm:px-0`} id="about">
         <div className="mb-2 text-center">
           <span className={`italic text-base ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>A five-year journey timeline</span>
         </div>
-        <div className="w-full overflow-x-auto">
-          <div className="flex flex-col items-center">
-            {/* Timeline garis dan node */}
-            <div className="relative flex flex-row flex-nowrap items-center gap-2 sm:gap-0 py-8 px-2 min-w-[700px]" style={{justifyContent: 'flex-start'}}>
-              {/* Garis lurus menyesuaikan dark mode */}
-              <div className={`absolute top-1/2 left-0 right-0 h-0.5 z-0 ${darkMode ? 'bg-white' : 'bg-black'}`} style={{height: 2}} />
-              {timeline.map((item, i) => (
-                <div key={item.year} className="relative flex flex-col items-center z-10" style={{minWidth: 70}}>
-                  {/* Node bulat interaktif */}
-                  <button
-                    onClick={() => setOpenYear(openYear === i ? null : i)}
-                    className={`transition-all duration-200 rounded-full flex items-center justify-center focus:outline-none ${openYear === i ? 'scale-110 shadow-lg' : ''} ${item.year === '2025' ? 'w-10 h-10' : 'w-7 h-7'} mx-0 border-2 ${darkMode ? 'border-white bg-black' : 'border-black bg-white'}`}
-                    style={{zIndex: 2}}
-                    aria-label={`Buka detail ${item.year}`}
-                  >
-                    <div className={`${item.year === '2025' ? 'w-4 h-4' : 'w-3 h-3'} rounded-full ${darkMode ? 'bg-white' : 'bg-black'}`} />
-                  </button>
-                  {/* Tahun */}
-                  <span className={`mt-2 text-base md:text-lg font-bold font-mono tracking-wide select-none ${darkMode ? 'text-white' : 'text-black'}`}>
-                    {item.year}
-                  </span>
-                  {/* Detail accordion */}
-                  <motion.div
-                    initial={false}
-                    animate={{ height: openYear === i ? 'auto' : 0, opacity: openYear === i ? 1 : 0 }}
-                    transition={{ duration: 0.3, ease: 'easeInOut' }}
-                    className="overflow-hidden w-44 md:w-56"
-                  >
-                    {openYear === i && (
-                      <div className={`mt-2 mb-2 px-2 py-2 text-xs md:text-sm rounded shadow border ${darkMode ? 'text-white border-white bg-black' : 'text-black border-black bg-white'}`}>
-                        {item.desc}
-                      </div>
-                    )}
-                  </motion.div>
-                </div>
-              ))}
+        <div className="flex flex-col items-center w-full max-w-xs sm:max-w-md mx-auto relative py-8">
+          {/* Garis vertikal */}
+          <div className={`absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-1 ${darkMode ? 'bg-white' : 'bg-black'}`} style={{zIndex: 0}} />
+          {timeline.map((item, i) => (
+            <div key={item.year} className="relative flex flex-row items-center w-full z-10 mb-8 last:mb-0">
+              {/* Node bulat interaktif */}
+              <button
+                onClick={() => setOpenYear(openYear === i ? null : i)}
+                className={`transition-all duration-200 rounded-full flex items-center justify-center focus:outline-none border-2 ${item.year === '2025' ? 'w-12 h-12 border-yellow-400 bg-yellow-100 animate-pulse' : 'w-8 h-8'} ${darkMode ? 'border-white bg-black' : 'border-black bg-white'} ${openYear === i ? 'scale-110 shadow-lg' : ''}`}
+                style={{zIndex: 2, marginRight: 24}}
+                aria-label={`Buka detail ${item.year}`}
+              >
+                <div className={`${item.year === '2025' ? 'w-5 h-5 bg-yellow-400' : 'w-3 h-3'} rounded-full ${item.year === '2025' ? '' : (darkMode ? 'bg-white' : 'bg-black')}`} />
+              </button>
+              {/* Tahun dan detail */}
+              <div className="flex-1">
+                <span className={`text-base md:text-lg font-bold font-mono tracking-wide select-none ${darkMode ? 'text-white' : 'text-black'}`}>{item.year}</span>
+                <motion.div
+                  initial={false}
+                  animate={{ height: openYear === i ? 'auto' : 0, opacity: openYear === i ? 1 : 0 }}
+                  transition={{ duration: 0.3, ease: 'easeInOut' }}
+                  className="overflow-hidden"
+                >
+                  {openYear === i && (
+                    <div className={`mt-2 mb-2 px-2 py-2 text-xs md:text-sm rounded shadow border ${darkMode ? 'text-white border-white bg-black' : 'text-black border-black bg-white'}`}>{item.desc}</div>
+                  )}
+                </motion.div>
+              </div>
             </div>
-          </div>
+          ))}
         </div>
       </section>
 
@@ -177,8 +171,13 @@ export default function Home() {
   <h2 className={`text-2xl xs:text-3xl font-bold mb-8 sm:mb-10 font-title text-center ${darkMode ? 'text-white' : 'text-black'}`}>Portofolio</h2>
         <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 w-full max-w-xs xs:max-w-2xl lg:max-w-5xl">
           {portfolio.map((item, i) => {
-            // All portfolio items show inline alert 'Coming soon'
+            // Sertifikat diarahkan ke laman Credly
+            const isCert = item.title.toLowerCase().includes('sertifikat');
             const handleClick = () => {
+              if (isCert) {
+                window.open('https://www.credly.com/users/rahmat-al-ihsan/badges#credly', '_blank');
+                return;
+              }
               setShowInlineAlert(prev => ({ ...prev, [i]: true }));
               setTimeout(() => setShowInlineAlert(prev => ({ ...prev, [i]: false })), 2000);
             };
@@ -200,8 +199,8 @@ export default function Home() {
                 <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-80 flex items-center justify-center transition-all duration-300">
                   <span className="text-white text-lg font-bold">Lihat Detail</span>
                 </div>
-                {/* Inline alert for all portfolio items */}
-                {showInlineAlert[i] && (
+                {/* Inline alert untuk selain sertifikat */}
+                {!isCert && showInlineAlert[i] && (
                   <div className={`absolute left-1/2 -translate-x-1/2 bottom-4 rounded-lg px-4 py-2 font-semibold shadow z-20 animate-fadeIn border ${darkMode ? 'bg-black border-white text-white' : 'bg-white border-black text-black'}`}>
                     Coming soon
                   </div>
@@ -219,9 +218,17 @@ export default function Home() {
           {skills.map((item, i) => (
             <div
               key={i}
-              className="flex flex-col items-center justify-center"
+              className="flex flex-col items-center justify-center cursor-pointer"
+              onClick={() => setActiveSkill(activeSkill === i ? null : i)}
             >
-              <Image src={item.img} alt={item.name} width={56} height={56} className="object-contain grayscale hover:grayscale-0 transition-all duration-500" />
+              <Image
+                src={item.img}
+                alt={item.name}
+                width={56}
+                height={56}
+                className={`object-contain transition-all duration-500 ${activeSkill === i ? '' : 'grayscale'} ${activeSkill === i ? 'scale-110 drop-shadow-lg' : ''}`}
+                style={activeSkill === i ? { filter: 'none' } : {}}
+              />
               <div className={`mt-2 text-base font-semibold ${darkMode ? 'text-white' : 'text-black'}`}>{item.name}</div>
             </div>
           ))}
