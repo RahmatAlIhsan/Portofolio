@@ -1,10 +1,17 @@
 "use client";
+
 import { useState } from "react";
 import emailjs from "@emailjs/browser";
 import styles from "../styles/ContactSection.module.css";
 
+type FormData = {
+  name: string;
+  email: string;
+  message: string;
+};
+
 export function ContactSection() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
     message: "",
@@ -13,14 +20,16 @@ export function ContactSection() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
@@ -100,7 +109,6 @@ export function ContactSection() {
           </button>
         </form>
 
-        {/* POPUP SUCCESS */}
         {submitted && (
           <div className={styles.successPopup}>
             <div className={styles.popupContent}>
