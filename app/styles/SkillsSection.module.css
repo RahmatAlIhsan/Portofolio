@@ -1,0 +1,82 @@
+/* Skills Section Styles - Light & Clean Theme */
+
+.skillsSection {
+  padding: 7rem 1.5rem;
+  background: #f8fafc;           /* Background terang yang nyaman */
+  color: #1f2937;
+}
+
+.skillsContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.sectionTitle {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 4rem;
+  letter-spacing: -0.03em;
+}
+
+.skillsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
+}
+
+.skillItem {
+  background: #ffffff;
+  padding: 2.8rem 1.8rem;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.4s ease;
+  height: 100%;
+}
+
+.skillItem:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+  border-color: #64748b;
+}
+
+.skillIcon {
+  font-size: 3.2rem;
+  color: #111827;
+  margin-bottom: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.skillItem:hover .skillIcon {
+  color: #1e40af;
+  transform: scale(1.15);
+}
+
+.skillName {
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 0.8rem;
+}
+
+.skillDesc {
+  font-size: 1.05rem;
+  color: #475569;
+  line-height: 1.6;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .skillsSection {
+    padding: 5rem 1rem;
+  }
+  
+  .sectionTitle {
+    font-size: 2.5rem;
+  }
+  
+  .skillItem {
+    padding: 2.2rem 1.5rem;
+  }
+}

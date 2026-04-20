@@ -1,0 +1,90 @@
+/* Contact Section Styles */
+
+.contactSection {
+  padding: 7rem 1.5rem;
+  background: #fff;
+}
+
+.contactContainer {
+  max-width: 32rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.contactTitle {
+  font-size: 3rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.contactDescription {
+  color: #52525b;
+  margin-bottom: 2.5rem;
+}
+
+.contactForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  text-align: left;
+}
+
+.formInput {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  border-radius: 1rem;
+  border: 1px solid #d1d5db;
+  background: transparent;
+  font-size: 1rem;
+}
+
+.formInput::placeholder {
+  color: #a1a1aa;
+}
+
+.formInput:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+.formTextarea {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  border-radius: 1rem;
+  border: 1px solid #d1d5db;
+  background: transparent;
+  font-size: 1rem;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.formTextarea::placeholder {
+  color: #a1a1aa;
+}
+
+.formTextarea:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+.submitButton {
+  width: 100%;
+  padding: 1rem;
+  background: #000;
+  color: #fff;
+  border-radius: 1rem;
+  font-weight: 500;
+  font-size: 1.125rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submitButton:hover {
+  background: #1f2937;
+}
+
+.whiteBackground {
+  background: #fff;
+  color: #000;
+}
