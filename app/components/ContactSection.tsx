@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import emailjs from "emailjs-com";
+import emailjs from "@emailjs/browser";
 import styles from "../styles/ContactSection.module.css";
 
 export function ContactSection() {
@@ -14,10 +14,10 @@ export function ContactSection() {
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       [e.target.name]: e.target.value,
-    });
+    }));
   };
 
   const handleFormSubmit = (e) => {
@@ -52,7 +52,9 @@ export function ContactSection() {
   return (
     <section className={styles.contactSection} id="contact">
       <div className={styles.contactContainer}>
-        <h2 className={styles.contactTitle}>Let's Build Something Great</h2>
+        <h2 className={styles.contactTitle}>
+          Let&apos;s Build Something Great
+        </h2>
 
         <p className={styles.contactDescription}>
           Open for freelance, collaborations, and full-time opportunities.
@@ -97,6 +99,16 @@ export function ContactSection() {
               : "Send Message"}
           </button>
         </form>
+
+        {/* POPUP SUCCESS */}
+        {submitted && (
+          <div className={styles.successPopup}>
+            <div className={styles.popupContent}>
+              <span className={styles.checkIcon}>✓</span>
+              <p>Message sent successfully!</p>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );
