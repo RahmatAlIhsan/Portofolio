@@ -36,6 +36,7 @@
   border: 1px solid #d1d5db;
   background: transparent;
   font-size: 1rem;
+  font-family: inherit;
 }
 
 .formInput::placeholder {
@@ -87,4 +88,62 @@
 .whiteBackground {
   background: #fff;
   color: #000;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .contactSection {
+    padding: 5rem 1rem;
+  }
+
+  .contactTitle {
+    font-size: 2.4rem;
+  }
+
+  .contactDescription {
+    font-size: 0.95rem;
+    margin-bottom: 2rem;
+  }
+
+  .contactForm {
+    gap: 1.25rem;
+  }
+
+  .formInput,
+  .formTextarea {
+    padding: 0.85rem 1.25rem;
+    font-size: 0.95rem;
+  }
+
+  .submitButton {
+    padding: 0.85rem;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .contactSection {
+    padding: 3rem 0.85rem;
+  }
+
+  .contactTitle {
+    font-size: 1.8rem;
+  }
+
+  .contactDescription {
+    font-size: 0.9rem;
+  }
+
+  .formInput,
+  .formTextarea {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    border-radius: 0.75rem;
+  }
+
+  .submitButton {
+    padding: 0.75rem;
+    font-size: 0.95rem;
+    border-radius: 0.75rem;
+  }
 }

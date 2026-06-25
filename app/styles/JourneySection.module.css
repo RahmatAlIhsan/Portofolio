@@ -84,6 +84,19 @@
   margin-bottom: 18px;
 }
 
+.timelineDot {
+  position: absolute;
+  left: -41px;
+  top: 20px;
+  width: 12px;
+  height: 12px;
+  background: #111;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px #e5e5e5;
+  z-index: 2;
+}
+
 .timelineItemCategory {
   display: inline-block;
   padding: 7px 22px;
@@ -133,7 +146,59 @@
 }
 
 @media (max-width: 480px) {
+  .journeySection {
+    padding: 3rem 0.85rem;
+  }
+
   .journeyTitle {
-    font-size: 2.7rem;
+    font-size: 2rem;
+  }
+
+  .journeyHeader {
+    margin-bottom: 2.5rem;
+  }
+
+  .journeyTimeline {
+    padding-left: 28px;
+  }
+
+  .journeyTimeline::before {
+    left: 13px;
+  }
+
+  .timelineItem {
+    gap: 12px;
+    margin-bottom: 2rem;
+    flex-direction: column;
+  }
+
+  .timelineYear {
+    font-size: 1.2rem;
+    min-width: auto;
+    padding-top: 0;
+  }
+
+  .timelineContent {
+    padding: 1rem 1.25rem;
+  }
+
+  .timelineItemTitle {
+    font-size: 1.15rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .timelineItemDesc {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 0.75rem;
+  }
+
+  .timelineItemCategory {
+    font-size: 0.8rem;
+    padding: 4px 14px;
+  }
+
+  .timelineDot {
+    display: none;
   }
 }

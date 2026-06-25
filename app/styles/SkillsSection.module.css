@@ -69,14 +69,68 @@
 /* Responsive */
 @media (max-width: 768px) {
   .skillsSection {
-    padding: 5rem 1rem;
+    padding: 4rem 1rem;
   }
   
   .sectionTitle {
-    font-size: 2.5rem;
+    font-size: 2.4rem;
+    margin-bottom: 2.5rem;
   }
   
+  .skillsGrid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.25rem;
+  }
+
   .skillItem {
-    padding: 2.2rem 1.5rem;
+    padding: 2rem 1.25rem;
+  }
+
+  .skillIcon {
+    font-size: 2.5rem;
+  }
+
+  .skillName {
+    font-size: 1.15rem;
+  }
+
+  .skillDesc {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .skillsSection {
+    padding: 3rem 0.85rem;
+  }
+
+  .sectionTitle {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .skillsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .skillItem {
+    padding: 1.5rem 1rem;
+    border-radius: 12px;
+  }
+
+  .skillIcon {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .skillName {
+    font-size: 1rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .skillDesc {
+    font-size: 0.8rem;
+    line-height: 1.5;
   }
 }
